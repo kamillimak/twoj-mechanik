@@ -1024,8 +1024,20 @@ body[data-page-style="interfaces"] .fab-call {
 body[data-page-style="interfaces"] .fab-call:active {
   transform: scale(.96);
 }
-body[data-page-style="interfaces"] .service-card {
-  box-shadow: 0 2px 10px -6px rgba(20, 60, 120, .18);
+body[data-page-style="interfaces"] .service-card,
+body[data-page-style="interfaces"] .reviews-card {
+  border-color: transparent;
+  border-radius: 24px;
+  box-shadow: 0 16px 36px -16px rgba(20, 60, 120, .35), 0 2px 8px -2px rgba(20, 60, 120, .15);
+}
+body[data-page-style="interfaces"] .contact-card,
+body[data-page-style="interfaces"] .mobile-service {
+  border-radius: 22px;
+}
+body[data-page-style="interfaces"] .service-icon,
+body[data-page-style="interfaces"] .mobile-service-icon,
+body[data-page-style="interfaces"] .contact-icon {
+  border-radius: 16px;
 }
 body[data-page-style="interfaces"] .hero-visual-card,
 body[data-page-style="interfaces"] .why-card,
@@ -1128,40 +1140,42 @@ body[data-page-style="video"] .video-caption {
   z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: rgba(6, 13, 26, .55);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, .14);
+  gap: 9px;
+  background: rgba(6, 13, 26, .7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(63, 169, 245, .4);
   border-radius: 999px;
-  padding: 7px 14px 7px 10px;
+  padding: 10px 20px 10px 14px;
   font-family: var(--font-head);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: .5px;
+  letter-spacing: .8px;
   text-transform: uppercase;
-  color: var(--gray);
+  color: var(--white);
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, .6);
 }
 body[data-page-style="video"] .video-caption-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--accent-cyan);
+  box-shadow: 0 0 0 4px rgba(63, 169, 245, .25);
 }
 body[data-page-style="video"] .hero-video-bg .video-caption {
   left: 24px;
-  bottom: 24px;
+  top: 24px;
 }
 body[data-page-style="video"] .moto-video-bg .video-caption {
   right: 24px;
-  bottom: 24px;
+  top: 24px;
 }
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   body[data-page-style="video"] .hero-video-bg .video-caption,
   body[data-page-style="video"] .moto-video-bg .video-caption {
     left: 16px;
     right: 16px;
-    bottom: 16px;
+    top: 16px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

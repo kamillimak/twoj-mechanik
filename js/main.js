@@ -27,19 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Keep background videos as a visible, static frame under reduced motion
-  // instead of hiding them: a still image satisfies reduced-motion without
-  // leaving the section empty.
-  document.querySelectorAll('.hero-video-bg video, .moto-video-bg video').forEach(function (video) {
-    if (!reduceMotion) return;
-    var freezeFrame = function () {
-      if (video.currentTime > 1.1 || video.ended) {
-        video.pause();
-        video.removeEventListener('timeupdate', freezeFrame);
-      }
-    };
-    video.addEventListener('timeupdate', freezeFrame);
-  });
+  // Background videos (hero, motorcycle) always play on loop. They are
+  // muted, decorative footage rather than interactive motion, so they are
+  // exempt from prefers-reduced-motion here rather than freezing after the
+  // first second, which read as broken rather than accessible.
 
   // index-v4.html only: reveal why-list/reviews/contact items that have
   // no entrance treatment on the baseline pages (improve-animations audit).
