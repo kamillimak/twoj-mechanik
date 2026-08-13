@@ -40,6 +40,16 @@
       <svg class="icon-sm" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.48 1.32 5.01L2 22l5.25-1.38a9.9 9.9 0 004.79 1.22h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.87 9.87 0 0012.04 2zm5.8 14.13c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.11.11-1.79-.11-.41-.13-.94-.3-1.62-.6-2.85-1.23-4.71-4.1-4.85-4.29-.14-.19-1.16-1.55-1.16-2.95 0-1.4.73-2.09 1-2.38.26-.28.57-.35.76-.35.19 0 .38 0 .55.01.18.01.41-.07.64.49.24.58.81 2 .88 2.14.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.16-.29.36-.42.49-.14.14-.28.29-.12.57.16.28.71 1.17 1.52 1.9 1.05.94 1.93 1.23 2.21 1.37.28.14.44.12.6-.07.16-.19.68-.79.86-1.06.18-.28.36-.23.6-.14.24.09 1.53.72 1.79.85.26.13.44.19.5.3.06.11.06.63-.18 1.31z"/></svg>
       WhatsApp
     </a>
+    <label class="topbar-item" style="gap:6px;">
+      <span class="visually-hidden">Wersja strony</span>
+      <select id="versionSelect" class="version-select" aria-label="Wersja strony">
+        <option value="index.html">Wersja: Standard</option>
+        <option value="index-v2.html">Wersja: Wideo mocniejsze</option>
+        <option value="index-v3.html">Wersja: Interfejs</option>
+        <option value="index-v4.html">Wersja: Animacje</option>
+        <option value="index-v5.html">Wersja: Wideo</option>
+      </select>
+    </label>
   </div>
 </div>
 
@@ -268,19 +278,15 @@
   </section>
 
   <section id="motocykle" class="moto-scroll">
-    <div class="moto-scroll-track">
-      <div class="moto-scroll-sticky">
-        <canvas class="moto-canvas" aria-hidden="true"></canvas>
-        <div class="moto-scroll-grade" aria-hidden="true"></div>
-        <div class="moto-scroll-vignette" aria-hidden="true"></div>
-        <div class="moto-scroll-grain" aria-hidden="true"></div>
-        <div class="moto-scroll-content">
-          <h2 class="section-title section-title-light">Serwis motocykli.<br>Wracasz w trasę.</h2>
-          <p class="moto-scroll-body">Przeglądy, naprawy i przygotowanie do sezonu, żebyś mógł wsiąść i jechać bez zastanawiania się nad mechaniką.</p>
-          <a href="tel:+48507563317" class="btn btn-primary">Umów przegląd motocykla</a>
-        </div>
-        <div class="moto-scroll-progress" aria-hidden="true"><div class="moto-scroll-progress-fill"></div></div>
-      </div>
+    <div class="moto-video-bg" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="auto">
+        <source src="assets/video/moto-highway.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="moto-scroll-content">
+      <h2 class="section-title section-title-light">Serwis motocykli.<br>Wracasz w trasę.</h2>
+      <p class="moto-scroll-body">Przeglądy, naprawy i przygotowanie do sezonu, żebyś mógł wsiąść i jechać bez zastanawiania się nad mechaniką.</p>
+      <a href="tel:+48507563317" class="btn btn-primary">Umów przegląd motocykla</a>
     </div>
   </section>
 
@@ -411,9 +417,6 @@
   <svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.9 21 3 13.1 3 3.9c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.4 0 .8-.3 1L6.6 10.8z"/></svg>
 </a>
 
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/main.js"></script>
-<script src="js/moto-scroll.js"></script>
 </body>
 </html>

@@ -16,33 +16,70 @@ document.addEventListener('DOMContentLoaded', function () {
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
+  var versionSelect = document.getElementById('versionSelect');
+  if (versionSelect) {
+    var currentPage = location.pathname.split('/').pop() || 'index.html';
+    versionSelect.value = currentPage;
+    versionSelect.addEventListener('change', function () {
+      location.href = this.value;
+    });
+  }
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var heroVideo = document.querySelector('.hero-video-bg video');
-  if (heroVideo) {
-    if (reduceMotion) {
-      // Keep the video as a visible, static frame instead of hiding it:
-      // a still image satisfies reduced-motion without leaving the hero empty.
-      var freezeFrame = function () {
-        if (heroVideo.currentTime > 1.1 || heroVideo.ended) {
-          heroVideo.pause();
-          heroVideo.removeEventListener('timeupdate', freezeFrame);
-        }
-      };
-      heroVideo.addEventListener('timeupdate', freezeFrame);
+  // Keep background videos as a visible, static frame under reduced motion
+  // instead of hiding them: a still image satisfies reduced-motion without
+  // leaving the section empty.
+  document.querySelectorAll('.hero-video-bg video, .moto-video-bg video').forEach(function (video) {
+    if (!reduceMotion) return;
+    var freezeFrame = function () {
+      if (video.currentTime > 1.1 || video.ended) {
+        video.pause();
+        video.removeEventListener('timeupdate', freezeFrame);
+      }
+    };
+    video.addEventListener('timeupdate', freezeFrame);
+  });
+
+  // index-v4.html only: reveal why-list/reviews/contact items that have
+  // no entrance treatment on the baseline pages (improve-animations audit).
+  if (document.body.dataset.pageStyle === 'animations') {
+    var animTargets = document.querySelectorAll('.why-list li, .reviews-card, .contact-card, .contact-hours');
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      animTargets.forEach(function (el) { el.classList.add('in-view'); });
+    } else {
+      var animObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var group = Array.prototype.filter.call(el.parentElement.children, function (c) {
+            return c.matches('.why-list li, .reviews-card, .contact-card, .contact-hours');
+          });
+          var idx = group.indexOf(el);
+          el.style.transitionDelay = (idx * 90) + 'ms';
+          el.classList.add('in-view');
+          el.addEventListener('transitionend', function clearDelay() {
+            el.style.transitionDelay = '';
+            el.removeEventListener('transitionend', clearDelay);
+          });
+          animObserver.unobserve(el);
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+      animTargets.forEach(function (el) { animObserver.observe(el); });
     }
   }
 
-  var cards = document.querySelectorAll('.service-card');
+  var revealTargets = document.querySelectorAll('.service-card, .moto-scroll-content');
 
-  if (!cards.length) return;
+  if (!revealTargets.length) return;
 
   if (reduceMotion || !('IntersectionObserver' in window)) {
-    cards.forEach(function (card) { card.classList.add('in-view'); });
+    revealTargets.forEach(function (el) { el.classList.add('in-view'); });
     return;
   }
 
-  var observer = new IntersectionObserver(function (entries) {
+  var cards = document.querySelectorAll('.service-card');
+  var cardObserver = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
       var card = entry.target;
@@ -53,9 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
         card.style.transitionDelay = '';
         card.removeEventListener('transitionend', clearDelay);
       });
-      observer.unobserve(card);
+      cardObserver.unobserve(card);
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+  cards.forEach(function (card) { cardObserver.observe(card); });
 
-  cards.forEach(function (card) { observer.observe(card); });
+  var simpleReveal = document.querySelectorAll('.moto-scroll-content');
+  var simpleObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in-view');
+      simpleObserver.unobserve(entry.target);
+    });
+  }, { threshold: 0.25 });
+  simpleReveal.forEach(function (el) { simpleObserver.observe(el); });
 });
