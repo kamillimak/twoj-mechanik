@@ -16,8 +16,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  var cards = document.querySelectorAll('.service-card');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var heroVideo = document.querySelector('.hero-video-bg video');
+  if (heroVideo) {
+    if (reduceMotion) {
+      // Keep the video as a visible, static frame instead of hiding it:
+      // a still image satisfies reduced-motion without leaving the hero empty.
+      var freezeFrame = function () {
+        if (heroVideo.currentTime > 1.1 || heroVideo.ended) {
+          heroVideo.pause();
+          heroVideo.removeEventListener('timeupdate', freezeFrame);
+        }
+      };
+      heroVideo.addEventListener('timeupdate', freezeFrame);
+    }
+  }
+
+  var cards = document.querySelectorAll('.service-card');
 
   if (!cards.length) return;
 
