@@ -25,6 +25,63 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Reviews slider: native scroll-snap track + prev/next buttons + dots.
+  // Works on any page that has a [data-reviews-slider] block; touch users
+  // get free swipe via scroll-snap, desktop gets the buttons/dots.
+  document.querySelectorAll('[data-reviews-slider]').forEach(function (slider) {
+    var track = slider.querySelector('[data-track]');
+    var dotsWrap = slider.querySelector('[data-dots]');
+    var prevBtn = slider.querySelector('[data-dir="prev"]');
+    var nextBtn = slider.querySelector('[data-dir="next"]');
+    if (!track) return;
+    var cards = Array.prototype.slice.call(track.children);
+    if (!cards.length) return;
+
+    var dots = [];
+    if (dotsWrap) {
+      cards.forEach(function (card, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'reviews-slider-dot';
+        dot.setAttribute('aria-label', 'Przejdź do opinii ' + (i + 1));
+        dot.addEventListener('click', function () {
+          card.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+        });
+        dotsWrap.appendChild(dot);
+        dots.push(dot);
+      });
+    }
+
+    function updateActive() {
+      var trackLeft = track.getBoundingClientRect().left;
+      var closest = 0;
+      var closestDist = Infinity;
+      cards.forEach(function (card, i) {
+        var dist = Math.abs(card.getBoundingClientRect().left - trackLeft);
+        if (dist < closestDist) { closestDist = dist; closest = i; }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === closest); });
+      if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
+      if (nextBtn) nextBtn.disabled = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+    }
+
+    var scrollTimeout;
+    track.addEventListener('scroll', function () {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(updateActive, 80);
+    });
+
+    if (prevBtn) prevBtn.addEventListener('click', function () {
+      track.scrollBy({ left: -track.clientWidth * 0.85, behavior: 'smooth' });
+    });
+    if (nextBtn) nextBtn.addEventListener('click', function () {
+      track.scrollBy({ left: track.clientWidth * 0.85, behavior: 'smooth' });
+    });
+
+    updateActive();
+    window.addEventListener('resize', updateActive);
+  });
+
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Background videos (hero, motorcycle) always play on loop. They are
